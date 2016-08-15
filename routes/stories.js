@@ -18,14 +18,15 @@ router.get('/:id', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
+  console.log(req.body);
   var user = 1;
   var story = {
-    user: user,
-    title: req.body.story.title,
+    user_id: user,
+    title: req.body.title,
     start_date: moment().format(),
-    summary: req.body.story.summary,
+    summary: req.body.summary,
     edit_lock: 0,
-    genre_id: req.body.story.genre,
+    genre_id: req.body.genre,
     checkout_time: moment().format(),
     state_id: 1
   };
@@ -38,7 +39,6 @@ router.post('/', function(req, res, next) {
 });
 
 router.put('/:id', function(req, res, next) {
-
   var user = 1;
   var story = {
     user_id: user,
