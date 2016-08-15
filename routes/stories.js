@@ -3,7 +3,6 @@ var router = express.Router();
 
 var knex = require('../db/knex');
 var moment = require('moment');
-// var contributions = require('./contributions');
 
 router.get('/', function(req, res, next) {
   knex('stories').select().then(function(records){
@@ -39,7 +38,7 @@ router.post('/', function(req, res, next) {
 });
 
 router.put('/:id', function(req, res, next) {
-  
+
   var user = 1;
   var story = {
     user_id: user,
