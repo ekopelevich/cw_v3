@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var knex = require('../db/knex');
+
 router.get('/', function(req, res, next) {
   knex('users').select().then(function(records){
     res.status(200).send({users: records});
@@ -10,47 +12,38 @@ router.get('/', function(req, res, next) {
 router.get('/:id', function(req, res, next) {
   knex('users').select().where('id', req.params.id).first()
   .then(function(record){
-    res.status(200).send({story: record});
+    res.status(200).send({user: record});
   });
 });
 
 router.post('/', function(req, res, next) {
-  var user = 1;
-  var story = {
-    user: user,
-    title: req.body.story.title,
-    start_date: moment().format(),
-    summary: req.body.story.summary,
-    edit_lock: 0,
-    genre_id: req.body.story.genre,
-    checkout_time: moment().format(),
-    state_id: 1
+  var user = {
+    first_name:req.body.first_name,
+    last_name: req.body.last_name,
+    email: req.body.email,
+    location: req.body.location,
+    gender_id: req.body.gender_id
   };
 
-  knex('users').insert(story, 'id')
+  knex('users').insert(user, 'id')
   .then(function(ids) {
-    story.id = ids[0];
-    res.status(201).send(story);
+    user.id = ids[0];
+    res.status(201).send(user);
   });
 });
 
 router.put('/:id', function(req, res, next) {
-
-  var user = 1;
-  var story = {
-    user_id: user,
-    title: req.body.title,
-    start_date: moment().format(),
-    summary: req.body.summary,
-    edit_lock: 0,
-    genre_id: req.body.genre,
-    checkout_time: moment().format(),
-    state_id: 1
+  var user = {
+    first_name:req.body.first_name,
+    last_name: req.body.last_name,
+    email: req.body.email,
+    location: req.body.location,
+    gender_id: req.body.gender_id
   };
 
-  knex('users').update(story).where('id', req.params.id)
+  knex('users').update(user).where('id', req.params.id)
   .then(function(){
-    res.status(202).send(story);
+    res.status(202).send(user);
   });
 });
 
