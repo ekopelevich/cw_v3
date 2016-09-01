@@ -1,26 +1,28 @@
-var express = require('express');
-var router = express.Router();
+'use strict'
 
-var knex = require('../db/knex');
-var moment = require('moment');
+const express = require('express')
+const router = express.Router()
+const knex = require('../db/knex')
+const moment = require('moment')
+const contributions = require('./contributions')
 
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
   knex('stories').select().then(function(records){
-    res.status(200).send({stories: records});
-  });
-});
+    res.status(200).send({stories: records})
+  })
+})
 
-router.get('/:id', function(req, res, next) {
+router.get('/:id', function(req, res) {
   knex('stories').select().where('id', req.params.id).first()
   .then(function(record){
-    res.status(200).send({story: record});
-  });
-});
+    res.status(200).send({story: record})
+  })
+})
 
-router.post('/', function(req, res, next) {
-  console.log(req.body);
-  var user = 1;
-  var story = {
+router.post('/', function(req, res) {
+  console.log(req.body)
+  let user = 1
+  let story = {
     user_id: user,
     title: req.body.title,
     start_date: moment().format(),
@@ -28,19 +30,19 @@ router.post('/', function(req, res, next) {
     edit_lock: 0,
     genre_id: req.body.genre,
     checkout_time: moment().format(),
-    state_id: 1
-  };
+    state_id: 1,
+  }
 
   knex('stories').insert(story, 'id')
   .then(function(ids) {
-    story.id = ids[0];
-    res.status(201).send(story);
-  });
-});
+    story.id = ids[0]
+    res.status(201).send(story)
+  })
+})
 
-router.put('/:id', function(req, res, next) {
-  var user = 1;
-  var story = {
+router.put('/:id', function(req, res) {
+  let user = 1
+  let story = {
     user_id: user,
     title: req.body.title,
     start_date: moment().format(),
@@ -48,38 +50,22 @@ router.put('/:id', function(req, res, next) {
     edit_lock: 0,
     genre_id: req.body.genre,
     checkout_time: moment().format(),
-    state_id: 1
-  };
+    state_id: 1,
+  }
 
   knex('stories').update(story).where('id', req.params.id)
   .then(function(){
-    res.status(202).send(story);
-  });
-});
+    res.status(202).send(story)
+  })
+})
 
-router.delete('/:id', function(req, res, next) {
+router.delete('/:id', function(req, res) {
   knex('stories').del().where('id', req.params.id)
   .then(function(){
-    res.sendStatus(204);
-  });
-});
+    res.sendStatus(204)
+  })
+})
 
-// router.get('/:id/contributions', function(req, res, next) {
-//   knex.select().from('contributions')
-//     .where('id', req.params.id)
-//     .then(function(data){
-//       res.json(data);
-//     });
-// });
-//
-// router.get('/:id/contributions/:contribution_id', function(req, res, next) {
-//   knex.select().from('stories')
-//   .join('stories', 'contributions.id', 'story.id')
-//   .where('stories.id', req.params.id)
-//   .andWhere('contributions.id', req.params.contribution_id)
-//   .then(function(data){
-//     res.json(data);
-//   });
-// });
+router.use('/contributions', contributions)
 
-module.exports = router;
+module.exports = router
