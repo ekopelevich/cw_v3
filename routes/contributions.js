@@ -3,14 +3,13 @@
 const express = require('express')
 const router = express.Router({mergeParams: true})
 const knex = require('../db/knex')
-const moment = require('moment')
+// const moment = require('moment')
 
 router.get('/', function(req, res) {
-  res.send('hi')
-  // knex('contributions').select().where('storyId', req.params.id)
-  // .then(function(records){
-  //   res.status(200).send({contributions: records})
-  // })
+  knex('contributions').select().where('story_id', req.params.id)
+  .then(function(records){
+    res.status(200).send({contributions: records})
+  })
 })
 
 router.get('/:id', function(req, res) {
@@ -22,16 +21,15 @@ router.get('/:id', function(req, res) {
 
 router.post('/', function(req, res) {
   console.log(req.body)
-  let user = 1
-  let story = 1
   let contribution = {
-    user_id: user,
-    story_id: story,
+    user_id: req.body.user_id,
+    story_id: req.body.story_id,
     title: req.body.title,
     body: req.body.summary,
-    start_time: moment().format(),
+    // start_time: Date.now().moment().format(),
     status: 1,
   }
+  console.log(contribution)
 
   knex('contributions').insert(contribution, 'id')
   .then(function(ids) {
@@ -41,14 +39,12 @@ router.post('/', function(req, res) {
 })
 
 router.put('/:id', function(req, res) {
-  let user = 1
-  let story = 1
   let contribution = {
-    user_id: user,
-    story_id: story,
+    user_id: req.body.user_id,
+    story_id: req.body.story_id,
     title: req.body.title,
     body: req.body.summary,
-    start_time: moment().format(),
+    // start_time: Date.now().moment().format(),
     status: 1,
   }
 
