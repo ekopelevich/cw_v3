@@ -8,7 +8,7 @@ const contributions = require('./contributions')
 
 router.get('/', function(req, res) {
   knex('stories').select().then(function(records){
-    res.status(200).send({stories: records})
+    res.status(200).sendJSON({stories: records})
   })
 })
 
