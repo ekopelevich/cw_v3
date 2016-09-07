@@ -20,7 +20,6 @@ router.get('/:id', function(req, res) {
 })
 
 router.post('/', function(req, res) {
-  console.log(req.body)
   let contribution = {
     user_id: req.body.user_id,
     story_id: req.body.story_id,
@@ -29,7 +28,6 @@ router.post('/', function(req, res) {
     // start_time: Date.now().moment().format(),
     status: 1,
   }
-  console.log(contribution)
 
   knex('contributions').insert(contribution, 'id')
   .then(function(ids) {
