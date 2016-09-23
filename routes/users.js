@@ -2,56 +2,36 @@
 
 const express = require('express')
 const router = express.Router()
-const knex = require('../db/knex')
+const db = require('../db/api')
 
 router.get('/', function(req, res) {
-  knex('users').select().then(function(records){
-    res.status(200).send({users: records})
+  console.log('hello')
+  db.getAllUsers().then(records => {
+    res.send('users/users', {users: records})
   })
 })
 
 router.get('/:id', function(req, res) {
-  knex('users').select().where('id', req.params.id).first()
-  .then(function(record){
-    res.status(200).send({user: record})
+  db.getUser(req.params.id).then(record => {
+    res.send(record)
   })
 })
 
 router.post('/', function(req, res) {
-  let user = {
-    first_name:req.body.first_name,
-    last_name: req.body.last_name,
-    email: req.body.email,
-    location: req.body.location,
-    gender_id: req.body.gender_id,
-  }
-
-  knex('users').insert(user, 'id')
-  .then(function(ids) {
-    user.id = ids[0]
-    res.status(201).send(user)
+  db.createUser(req.body).then(() => {
+    res.redirect('/users')
   })
 })
 
 router.put('/:id', function(req, res) {
-  let user = {
-    first_name:req.body.first_name,
-    last_name: req.body.last_name,
-    email: req.body.email,
-    location: req.body.location,
-    gender_id: req.body.gender_id,
-  }
-
-  knex('users').update(user).where('id', req.params.id)
-  .then(function(){
-    res.status(202).send(user)
+  db.updateUser(req.body).then(() => {
+    res.json({'response': 'user updated'})
   })
 })
 
 router.delete('/:id', function(req, res) {
-  knex('users').del().where('id', req.params.id)
-  .then(function(){
-    res.sendStatus(204)
+  db.deleteUser(req.params.id).then((id) => {
+    res.json({'response': `user ${id} deleted`})
   })
 })
 

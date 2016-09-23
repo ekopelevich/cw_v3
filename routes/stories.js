@@ -2,70 +2,40 @@
 
 const express = require('express')
 const router = express.Router()
-const knex = require('../db/knex')
+const db = require('../db/api')
 const moment = require('moment')
 const contributions = require('./contributions')
 
+router.use('/contributions', contributions)
+
 router.get('/', function(req, res) {
-  knex('stories').select().then(function(records){
-    res.status(200).sendJSON({stories: records})
+  db.getAllStories().then(function(records){
+    res.status(200).json({stories: records})
   })
 })
 
 router.get('/:id', function(req, res) {
-  knex('stories').select().where('id', req.params.id).first()
-  .then(function(record){
+  db.getStory(req.params.id).then(function(record){
     res.status(200).send({story: record})
   })
 })
 
 router.post('/', function(req, res) {
-  console.log(req.body)
-  let user = 1
-  let story = {
-    user_id: user,
-    title: req.body.title,
-    start_date: moment().format(),
-    summary: req.body.summary,
-    edit_lock: 0,
-    genre_id: req.body.genre,
-    checkout_time: moment().format(),
-    state_id: 1,
-  }
-
-  knex('stories').insert(story, 'id')
-  .then(function(ids) {
-    story.id = ids[0]
-    res.status(201).send(story)
+  db.createStory(req.body).then(function(id) {
+    res.status(201).redirect(`/stories/${id}`)
   })
 })
 
 router.put('/:id', function(req, res) {
-  let user = 1
-  let story = {
-    user_id: user,
-    title: req.body.title,
-    start_date: moment().format(),
-    summary: req.body.summary,
-    edit_lock: 0,
-    genre_id: req.body.genre,
-    checkout_time: moment().format(),
-    state_id: 1,
-  }
-
-  knex('stories').update(story).where('id', req.params.id)
-  .then(function(){
-    res.status(202).send(story)
+  db.updateStory(req.params.id).then(function(id){
+    res.status(202).json(id)
   })
 })
 
 router.delete('/:id', function(req, res) {
-  knex('stories').del().where('id', req.params.id)
-  .then(function(){
-    res.sendStatus(204)
+  db.deleteStory(req.params.id).then(function(id){
+    res.sendStatus(204).json(id)
   })
 })
-
-router.use('/contributions', contributions)
 
 module.exports = router

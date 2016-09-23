@@ -1,4 +1,4 @@
-module.exports = function(knex, Promise) {
+exports.seed = function(knex, Promise) {
   return Promise.all([
     knex('stories').insert({
       user_id: 1,
