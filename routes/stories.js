@@ -5,7 +5,7 @@ const router = express.Router()
 const db = require('../db/api')
 const chapters = require('./chapters')
 
-router.use('/chapters', chapters)
+router.use('/:id/chapters', chapters)
 
 router.get('/', function(req, res) {
   db.getAllStories().then(stories => {
