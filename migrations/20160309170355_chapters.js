@@ -7,7 +7,7 @@ exports.up = function(knex) {
     table.string('body')
     table.string('image')
     table.integer('state_id').unsigned().references('states.id')
-    table.timestamps()
+    table.timestamp('created_at')
   })
 }
 

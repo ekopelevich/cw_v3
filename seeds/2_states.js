@@ -2,7 +2,7 @@ exports.seed = function(knex, Promise) {
   return Promise.all([
     knex('states').insert([
       {state: 'in progress'},
-      {state: 'submitted'},
+      {state: 'pending'},
       {state: 'approved'},
       {state: 'rejected'},
     ]),

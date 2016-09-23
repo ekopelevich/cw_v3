@@ -6,7 +6,7 @@ exports.up = function(knex) {
     table.integer('genre_id').unsigned().references('genres.id')
     table.string('title')
     table.text('summary')
-    table.string('cover_image')
+    table.string('cover')
     table.boolean('isLocked')
     table.boolean('isActive')
     table.timestamps()

@@ -10,8 +10,8 @@ exports.seed = function(knex, Promise) {
         avatar: 'https://pbs.twimg.com/profile_images/640659562349989888/AjokLNHY.jpg',
         isBanned: false,
         isActive: true,
-        created_on: '2015-02-01',
-        edited_on: '2015-02-01',
+        created_at: '2015-02-01',
+        updated_at: '2015-02-01',
       }, {
         first_name: 'Shad',
         last_name: 'Self',
@@ -21,8 +21,8 @@ exports.seed = function(knex, Promise) {
         avatar: 'https://pbs.twimg.com/profile_images/640659562349989888/AjokLNHY.jpg',
         isBanned: false,
         isActive: true,
-        created_on: '2015-03-01',
-        edited_on: '2015-03-01',
+        created_at: '2015-03-01',
+        updated_at: '2015-03-01',
       }, {
         first_name: 'Robert',
         last_name: 'Dinero',
@@ -32,8 +32,8 @@ exports.seed = function(knex, Promise) {
         avatar: 'https://pbs.twimg.com/profile_images/640659562349989888/AjokLNHY.jpg',
         isBanned: false,
         isActive: true,
-        created_on: '2015-03-01',
-        edited_on: '2015-03-01',
+        created_at: '2015-03-01',
+        updated_at: '2015-03-01',
       }, {
         first_name: 'Annakin',
         last_name: 'Skywalker',
@@ -43,8 +43,8 @@ exports.seed = function(knex, Promise) {
         avatar: 'https://pbs.twimg.com/profile_images/640659562349989888/AjokLNHY.jpg',
         isBanned: false,
         isActive: true,
-        created_on: '2015-03-01',
-        edited_on: '2015-03-01',
+        created_at: '2015-03-01',
+        updated_at: '2015-03-01',
       },
     ]),
   ])
