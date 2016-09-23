@@ -7,7 +7,7 @@ const db = require('../db/api')
 router.get('/', function(req, res) {
   console.log('hello')
   db.getAllUsers().then(records => {
-    res.send('users/users', {users: records})
+    res.send(records)
   })
 })
 

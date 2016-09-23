@@ -3,36 +3,33 @@
 const express = require('express')
 const router = express.Router()
 const db = require('../db/api')
-const chapters = require('./chapters')
-
-router.use('/chapters', chapters)
 
 router.get('/', function(req, res) {
-  db.getAllStories().then(stories => {
-    res.status(200).send(stories)
+  db.getAllChapters().then(chapters => {
+    res.status(200).send(chapters)
   })
 })
 
 router.get('/:id', function(req, res) {
-  db.getStory(req.params.id).then(story => {
-    res.status(200).send(story)
+  db.getChapter(req.params.id).then(chapter => {
+    res.status(200).send(chapter)
   })
 })
 
 router.post('/', function(req, res) {
-  db.createStory(req.body).then(id => {
-    res.status(201).redirect(`/stories/${id}`)
+  db.createChapter(req.body).then(id => {
+    res.status(201).redirect(`/chapters/${id}`)
   })
 })
 
 router.put('/:id', function(req, res) {
-  db.updateStory(req.params.id).then(id => {
+  db.updateChapter(req.params.id).then(id => {
     res.status(202).json(id)
   })
 })
 
 router.delete('/:id', function(req, res) {
-  db.deleteStory(req.params.id).then(id => {
+  db.deleteChapter(req.params.id).then(id => {
     res.sendStatus(204).json(id)
   })
 })
