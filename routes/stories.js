@@ -3,13 +3,11 @@
 const express = require('express')
 const router = express.Router()
 const db = require('../db/api')
-const chapters = require('./chapters')
-
-router.use('/:id/chapters', chapters)
 
 router.get('/', function(req, res) {
+  console.log(req)
   db.getAllStories().then(stories => {
-    res.status(200).send(stories)
+    res.status(200).json({'stories': stories})
   })
 })
 

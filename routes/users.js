@@ -5,7 +5,7 @@ const router = express.Router()
 const db = require('../db/api')
 
 router.get('/', function(req, res) {
-  console.log('hello')
+  console.log('req')
   db.getAllUsers().then(records => {
     res.send(records)
   })

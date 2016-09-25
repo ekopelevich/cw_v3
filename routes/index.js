@@ -13,5 +13,6 @@ router.get('/', function(req, res) {
 router.use('/users', users)
 router.use('/stories', stories)
 router.use('/users/:id/stories', chapters)
+router.use('/:id/chapters', chapters)
 
 module.exports = router

@@ -47,4 +47,14 @@ module.exports = {
     return knex('stories').del()
       .where('stories.id', id)
   },
+  getAllChapters(storyId){
+    return knex('chapters')
+    .join('stories', 'chapters.story_id', 'stories.id')
+    .select()
+    .where('stories.id', storyId)
+  // return knex('stories')
+  //   .join('chapters', 'chapters.story_id', 'stories.id')
+  //   .select('stories.id as storyId')
+  //   .where(storyId, 'stories.id')
+  },
 }
