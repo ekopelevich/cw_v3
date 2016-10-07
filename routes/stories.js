@@ -5,9 +5,34 @@ const router = express.Router()
 const db = require('../db/api')
 
 router.get('/', function(req, res) {
-  console.log(req)
+  console.log('here')
+  // console.log(req.body)
   db.getAllStories().then(stories => {
-    res.status(200).json({'stories': stories})
+    //res.header('Content-Type', 'application/vnd.api+json')
+    // res.status(200).json({ data: stories })
+    // .status(200).json({
+    //   "data": {
+    //     "type": "articles",
+    //     "id": "1"
+    //   }
+    // })
+    res.json({
+      data: {
+        type: 'story',
+        id: 1,
+        attributes: {
+          parent_id: 1,
+          genre_id: 1,
+          title: 'Cats',
+          summary: 'cool stuff',
+          cover: '123',
+          isLocked: false,
+          isActive: true,
+          created_at: Date.now(),
+          updated_at: Date.now(),
+        },
+      },
+    })
   })
 })
 
