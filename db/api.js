@@ -33,6 +33,7 @@ module.exports = {
   getStory(id){
     return knex('stories')
     .join('users', 'stories.user_id', 'users.id')
+    .join('genres', 'stories.genre_id', 'genres.id')
     .select()
     .where('stories.id', id).first()
   },
