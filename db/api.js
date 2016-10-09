@@ -27,6 +27,7 @@ module.exports = {
   getAllStories(){
   return knex('stories')
     .join('users', 'stories.user_id', 'users.id')
+    .join('genres', 'stories.genre_id', 'genres.id')
     .select()
   },
   getStory(id){
