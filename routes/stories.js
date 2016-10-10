@@ -5,7 +5,6 @@ const router = express.Router()
 const db = require('../db/api')
 
 router.get('/', function(req, res) {
-  console.log('here')
   db.getAllStories().then(stories => {
     res.header('Content-Type', 'application/vnd.api+json')
     res.status(200).json({ data: stories })
