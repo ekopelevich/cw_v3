@@ -8,12 +8,10 @@ const logger = require('morgan')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-// const fortune = require('fortune')
 const index = require('./routes/index')
 const session = require('express-session')
 const passport = require('passport')
 const Strategy = require('passport-twitter').Strategy
-// const auth = require('./routes/auth')
 const app = express()
 
 app.use(cors())
@@ -26,16 +24,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 passport.use(new Strategy({
     consumerKey: process.env.TWITTER_CONSUMER_KEY,
     consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-    callbackURL: 'http://127.0.0.1:3000/auth/twitter/callback',
+    callbackURL: 'http://localhost:3000/auth/twitter/callback',
   },
   function(token, tokenSecret, profile, cb) {
     cb(null, {id: profile.id, displayName: profile.displayName})
   })
 )
-
-app.use(session({secret: 'secret', saveUninitialized: true, resave: true}))
-app.use(passport.initialize())
-app.use(passport.session())
 
 passport.serializeUser(function(user, done) {
   done(null, user)
@@ -45,16 +39,26 @@ passport.deserializeUser(function(user, done) {
   done(null, user)
 })
 
+app.use(session({secret: 'secret', saveUninitialized: true, resave: true}))
+app.use(passport.initialize())
+app.use(passport.session())
+
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', req.headers.origin)
+  res.header('Access-Control-Allow-Headers', 'Authorization')
+  next()
+})
+
 app.get('/auth/twitter',
   passport.authenticate('twitter'),
   function(req, res){
     // The request will be redirected to Twitter for authentication,
     // so this function will not be called.
-    res.send('This function shouldn\'t have been called')
+    res.send('Error: this function shouldn\'t run.')
   })
 
 app.get('/auth/twitter/callback', passport.authenticate('twitter', {
-  successRedirect: '/',
+  successRedirect: 'http://localhost:8080/dashboard',
   failureRedirect: '/login',
 }))
 
