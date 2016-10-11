@@ -58,7 +58,7 @@ app.get('/auth/twitter',
   })
 
 app.get('/auth/twitter/callback', passport.authenticate('twitter', {
-  successRedirect: 'http://localhost:8080/dashboard',
+  successRedirect: 'http://localhost:8080/#/dashboard',
   failureRedirect: '/login',
 }))
 
