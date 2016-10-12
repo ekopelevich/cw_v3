@@ -1,5 +1,9 @@
 'use strict'
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
 const express = require('express')
 const router = express.Router()
 const passport = require('passport')
@@ -21,17 +25,17 @@ router.get('/twitter', passport.authenticate('twitter'), function(req, res){
 })
 
 router.get('/twitter/callback', passport.authenticate('twitter', {
-  successRedirect: 'http://localhost:3000/api/v1/auth/success',
-  failureRedirect: 'http://localhost:3000/api/v1/auth/fail',
+  successRedirect: process.env.SERVER_HOST + '/auth/success',
+  failureRedirect: process.env.SERVER_HOST + '/auth/fail',
 }))
 
 router.get('/success', (req, res) => {
   console.log('username', req.session.passport.user.username)
-  res.redirect('http://localhost:8080')
+  res.redirect(process.env.CLIENT_HOST)
 })
 
 router.get('/fail', (req, res) => {
-  res.redirect('http://localhost:8080')
+  res.redirect(process.env.CLIENT_HOST)
 })
 
 router.get('/logout', (req, res) => {
