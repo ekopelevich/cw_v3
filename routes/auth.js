@@ -3,10 +3,15 @@
 const express = require('express')
 const router = express.Router()
 const passport = require('passport')
+const app = require('../app')
 // const db = require('../db/api')
 
-router.get('/', (req, res, next) => {
-
+router.get('/', (req, res) => {
+  if (app.locals) {
+    console.log('user id', app.locals.user.id)
+    res.send({user: app.locals.user})
+  }
+  res.end()
 })
 
 router.get('/twitter', passport.authenticate('twitter'), function(req, res){
@@ -21,12 +26,11 @@ router.get('/twitter/callback', passport.authenticate('twitter', {
 }))
 
 router.get('/success', (req, res) => {
-  console.log('success', req.user)
+  console.log('username', req.session.passport.user.username)
   res.redirect('http://localhost:8080')
 })
 
 router.get('/fail', (req, res) => {
-  console.log('fail', req.user)
   res.redirect('http://localhost:8080')
 })
 

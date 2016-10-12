@@ -44,12 +44,6 @@ function(token, tokenSecret, profile, cb) {
   // })
 }))
 
-app.use(function (req, res, next) {
-  if (!req.session.passport) app.locals.user = null
-  else app.locals.user = req.session.passport.user
-  next()
-})
-
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', req.headers.origin)
   res.header('Access-Control-Allow-Headers', 'Authorization')
