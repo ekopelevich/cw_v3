@@ -3,7 +3,6 @@
 var knex = require('./knex')
 
 module.exports = {
-
   getAllUsers(){
     return knex('users')
   },
@@ -11,13 +10,28 @@ module.exports = {
     return knex('users')
     .where('users.id', id).first()
   },
-  createUser(user) {
-    return knex('users').insert(user)
+  findOrCreate(user, cb) {
+    console.log(user)
+    return knex('users')
+    .where('users.id', user.id)
+    .then(user => {
+      if (user) return new Promise(() => 'This user already exists!')
+      return knex('users')
+      .insert(user, 'id')
+    }).then((err, user) => {
+      cb(err, user)
+    })
   },
   updateUser(user) {
     return knex('users')
     .where('users.id', user.id)
-    .update(user)
+    .then((user) => {
+      if (!user) 'This user does not exist'
+      return knex('users')
+      .where('users.id', user.id)
+      .update(user, 'id')
+    })
+
   },
   deleteUser(id){
     return knex('users')
@@ -31,6 +45,7 @@ module.exports = {
     .select('stories.id as storyId', 'stories.parent_id as parentId', 'genres.genre as genre', 'stories.title as title', 'stories.summary as summary', 'stories.cover as coverImage', 'stories.created_at as createdAt', 'stories.updated_at as updatedAt', 'users.first_name as firstName', 'users.last_name as lastName', 'users.location as userLocation', 'users.avatar as avatar')
   },
   getStory(id){
+    console.log('id', id)
     return knex('stories')
     .join('users', 'stories.user_id', 'users.id')
     .join('genres', 'stories.genre_id', 'genres.id')

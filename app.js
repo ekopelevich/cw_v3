@@ -13,6 +13,7 @@ const session = require('express-session')
 const passport = require('passport')
 const Strategy = require('passport-twitter').Strategy
 const app = express()
+// const db = require('./db/api')
 
 app.use(cors())
 app.use(logger('dev'))
@@ -21,27 +22,27 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
-passport.use(new Strategy({
-    consumerKey: process.env.TWITTER_CONSUMER_KEY,
-    consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-    callbackURL: 'http://localhost:3000/auth/twitter/callback',
-  },
-  function(token, tokenSecret, profile, cb) {
-    cb(null, {id: profile.id, displayName: profile.displayName})
-  })
-)
-
+app.use(session({secret: 'secret', saveUninitialized: true, resave: true}))
+app.use(passport.initialize())
+app.use(passport.session())
 passport.serializeUser(function(user, done) {
   done(null, user)
 })
-
 passport.deserializeUser(function(user, done) {
   done(null, user)
 })
 
-app.use(session({secret: 'secret', saveUninitialized: true, resave: true}))
-app.use(passport.initialize())
-app.use(passport.session())
+passport.use(new Strategy({
+  consumerKey: process.env.TWITTER_CONSUMER_KEY,
+  consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+  callbackURL: 'http://localhost:3000/auth/twitter/callback',
+},
+function(token, tokenSecret, profile, cb) {
+  // db.findOrCreate(profile, function(err, user) {
+  //   if (err) return cb(err)
+  cb(null, profile)
+  // })
+}))
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', req.headers.origin)
@@ -49,18 +50,20 @@ app.use(function(req, res, next) {
   next()
 })
 
-app.get('/auth/twitter',
-  passport.authenticate('twitter'),
-  function(req, res){
+app.get('/auth/twitter', passport.authenticate('twitter'), function(req, res){
     // The request will be redirected to Twitter for authentication,
     // so this function will not be called.
     res.send('Error: this function shouldn\'t run.')
   })
 
 app.get('/auth/twitter/callback', passport.authenticate('twitter', {
-  successRedirect: 'http://localhost:8080/#/dashboard',
-  failureRedirect: '/login',
+  successRedirect: '/login',
+  failureRedirect: '/',
 }))
+
+app.get('/login', function(req, res){
+  res.redirect('http://localhost:8080')
+})
 
 app.get('/logout', function(req, res){
   res.redirect('/')
