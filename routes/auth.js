@@ -38,7 +38,8 @@ router.get('/fail', (req, res) => {
 })
 
 router.get('/logout', (req, res) => {
-  res.redirect('/')
+  req.app.locals.user = null
+  res.redirect(process.env.CLIENT_HOST)
 })
 
 
