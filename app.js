@@ -21,8 +21,8 @@ app.use(bodyParser.json({ type: 'application/*+json' }))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
-
 app.use(session({secret: 'secret', saveUninitialized: true, resave: true}))
+
 app.use(passport.initialize())
 app.use(passport.session())
 passport.serializeUser(function(user, done) {
@@ -35,7 +35,7 @@ passport.deserializeUser(function(user, done) {
 passport.use(new Strategy({
   consumerKey: process.env.TWITTER_CONSUMER_KEY,
   consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-  callbackURL: 'http://localhost:3000/auth/twitter/callback',
+  callbackURL: 'http://localhost:3000/api/v1/auth/twitter/callback',
 },
 function(token, tokenSecret, profile, cb) {
   // db.findOrCreate(profile, function(err, user) {
@@ -44,29 +44,16 @@ function(token, tokenSecret, profile, cb) {
   // })
 }))
 
+app.use(function (req, res, next) {
+  if (!req.session.passport) app.locals.user = null
+  else app.locals.user = req.session.passport.user
+  next()
+})
+
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', req.headers.origin)
   res.header('Access-Control-Allow-Headers', 'Authorization')
   next()
-})
-
-app.get('/auth/twitter', passport.authenticate('twitter'), function(req, res){
-    // The request will be redirected to Twitter for authentication,
-    // so this function will not be called.
-    res.send('Error: this function shouldn\'t run.')
-  })
-
-app.get('/auth/twitter/callback', passport.authenticate('twitter', {
-  successRedirect: '/login',
-  failureRedirect: '/',
-}))
-
-app.get('/login', function(req, res){
-  res.redirect('http://localhost:8080')
-})
-
-app.get('/logout', function(req, res){
-  res.redirect('/')
 })
 
 app.use('/api/v1', index)
