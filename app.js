@@ -15,7 +15,6 @@ const session = require('express-session')
 const passport = require('passport')
 const Strategy = require('passport-twitter').Strategy
 const app = express()
-// const db = require('./db/api')
 
 app.use(cors())
 app.use(logger('dev'))

@@ -2,7 +2,7 @@
 
 const express = require('express')
 const router = express.Router()
-const db = require('../db/api')
+const db = require('../db/stories')
 
 router.get('/', function(req, res) {
   console.log('stories route user', req.user)

@@ -7,13 +7,9 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express')
 const router = express.Router()
 const passport = require('passport')
-// const db = require('../db/api')
 
 router.get('/', (req, res) => {
-  if (req.session) {
-    res.send({user: req.app.locals.user})
-  }
-  res.end()
+  res.send({user: req.app.locals.user})
 })
 
 router.get('/twitter', passport.authenticate('twitter'), function(req, res){
@@ -30,7 +26,7 @@ router.get('/twitter/callback', passport.authenticate('twitter', {
 router.get('/success', (req, res) => {
   if (!req.session.passport) req.app.locals.user = null
   else req.app.locals.user = req.session.passport.user
-  res.redirect(process.env.CLIENT_HOST)
+  res.redirect(`${process.env.CLIENT_HOST}/#/dashboard/profile`)
 })
 
 router.get('/fail', (req, res) => {

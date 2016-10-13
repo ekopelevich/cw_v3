@@ -5,7 +5,6 @@ const router = express.Router()
 const auth = require('./auth')
 const users = require('./users')
 const stories = require('./stories')
-const chapters = require('./chapters')
 
 router.get('/', function(req, res) {
   res.send('Collabowrite API') // TODO: Document
@@ -13,8 +12,8 @@ router.get('/', function(req, res) {
 
 router.use('/auth', auth)
 router.use('/users', users)
+router.use('/users/:id/stories', users)
 router.use('/stories', stories)
-router.use('/users/:id/stories', chapters)
-router.use('/:id/chapters', chapters)
+router.use('/stories/:id/chapters', stories)
 
 module.exports = router
