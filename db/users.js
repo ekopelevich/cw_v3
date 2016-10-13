@@ -10,16 +10,25 @@ module.exports = {
     return knex('users')
     .where('users.id', id).first()
   },
-  findOrCreate(user, cb) {
-    console.log(user)
+  findOrCreate(user) {
+    const twitterUser = user
     return knex('users')
-    .where('users.id', user.id)
+    .where('users.id', user.id).first()
     .then(user => {
-      if (user) return new Promise(() => 'This user already exists!')
+      if (user) return user
+      const cwUser = {
+        id: twitterUser.id,
+        first_name: twitterUser.displayName.split(' ')[0],
+        last_name: twitterUser.displayName.split(' ')[1],
+        email: '',
+        location: '',
+        bio: '',
+        avatar: twitterUser.photos[0].value,
+        isBanned: false,
+        isActive: true,
+      }
       return knex('users')
-      .insert(user, 'id')
-    }).then((err, user) => {
-      cb(err, user)
+      .insert(cwUser, '*')
     })
   },
   updateUser(user) {

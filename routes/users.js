@@ -13,13 +13,15 @@ router.get('/', function(req, res) {
 
 router.get('/:id', function(req, res) {
   db.getUser(req.params.id).then(record => {
+    console.log(record)
     res.send(record)
   })
 })
 
 router.post('/', function(req, res) {
-  db.createUser(req.body).then(() => {
-    res.redirect('/users')
+  console.log('post route id', req.body._json.id)
+  db.findOrCreate(req.body).then(user => {
+    res.send(user)
   })
 })
 
