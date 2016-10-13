@@ -6,36 +6,34 @@ const db = require('../db/stories')
 
 router.get('/', function(req, res) {
   db.getAllStories().then(stories => {
-    res.header('Content-Type', 'application/vnd.api+json')
-    res.status(200).json({ data: stories })
+    res.send({ data: stories })
   })
 })
 
 router.get('/:id', function(req, res) {
   db.getStory(req.params.id).then(story => {
-    res.header('Content-Type', 'application/vnd.api+json')
-    res.status(200).send(story)
+    res.send(story)
   })
 })
 
 router.post('/', function(req, res) {
-  db.createStory(req.body).then(id => {
-    res.header('Content-Type', 'application/vnd.api+json')
-    res.status(201).redirect(`/stories/${id}`)
+  console.log('body', req.body)
+  db.createStory(req.body).then(idArray => {
+    const id = idArray[0]
+    console.log('post story route, id', id)
+    res.status(201).send({id: id})
   })
 })
 
 router.put('/:id', function(req, res) {
   db.updateStory(req.params.id).then(id => {
-    res.header('Content-Type', 'application/vnd.api+json')
-    res.status(202).json(id)
+    res.send(id)
   })
 })
 
 router.delete('/:id', function(req, res) {
   db.deleteStory(req.params.id).then(id => {
-    res.header('Content-Type', 'application/vnd.api+json')
-    res.sendStatus(204).json(id)
+    res.send(id)
   })
 })
 

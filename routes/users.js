@@ -5,7 +5,6 @@ const router = express.Router()
 const db = require('../db/users')
 
 router.get('/', function(req, res) {
-  console.log('req')
   db.getAllUsers().then(records => {
     res.send(records)
   })
@@ -19,7 +18,6 @@ router.get('/:id', function(req, res) {
 })
 
 router.post('/', function(req, res) {
-  console.log('post route', req.body)
   db.findOrCreate(req.body).then(user => {
     res.send(user)
   })

@@ -47,8 +47,9 @@ function(token, tokenSecret, profile, cb) {
   // })
 }))
 
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', req.headers.origin)
+app.all('/*', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', process.env.CLIENT_HOST)
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,HEAD,DELETE,OPTIONS')
   res.header('Access-Control-Allow-Headers', 'Authorization')
   next()
 })
