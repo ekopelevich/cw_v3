@@ -18,12 +18,12 @@ module.exports = {
       if (user) return user
       const cwUser = {
         id: twitterUser.id,
-        first_name: twitterUser.displayName.split(' ')[0],
-        last_name: twitterUser.displayName.split(' ')[1],
+        first_name: twitterUser.name.split(' ')[0],
+        last_name: twitterUser.name.split(' ')[1],
         email: '',
-        location: '',
-        bio: '',
-        avatar: twitterUser.photos[0].value,
+        location: twitterUser.location,
+        bio: twitterUser.description,
+        avatar: twitterUser.profile_image_url,
         isBanned: false,
         isActive: true,
       }

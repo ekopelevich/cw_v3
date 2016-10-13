@@ -19,7 +19,7 @@ router.get('/:id', function(req, res) {
 })
 
 router.post('/', function(req, res) {
-  console.log('post route id', req.body._json.id)
+  console.log('post route', req.body)
   db.findOrCreate(req.body).then(user => {
     res.send(user)
   })
