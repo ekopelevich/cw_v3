@@ -9,6 +9,7 @@ const router = express.Router()
 const passport = require('passport')
 
 router.get('/', (req, res) => {
+  if (!req.app.locals.user) res.end()
   res.send({user: req.app.locals.user})
 })
 
@@ -37,6 +38,5 @@ router.get('/logout', (req, res) => {
   req.app.locals.user = null
   res.redirect(process.env.CLIENT_HOST)
 })
-
 
 module.exports = router
