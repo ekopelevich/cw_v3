@@ -27,7 +27,8 @@ router.get('/twitter/callback', passport.authenticate('twitter', {
 router.get('/success', (req, res) => {
   if (!req.session.passport) req.app.locals.user = null
   else req.app.locals.user = req.session.passport.user
-  res.redirect(`${process.env.CLIENT_HOST}/#/dashboard/profile`)
+  console.log(req.app.locals.user.id)
+  res.redirect(`${process.env.CLIENT_HOST}/#/users/${req.app.locals.user.id}/dashboard/profile`)
 })
 
 router.get('/fail', (req, res) => {

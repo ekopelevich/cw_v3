@@ -12,7 +12,6 @@ router.get('/', function(req, res) {
 
 router.get('/:id', function(req, res) {
   db.getUser(req.params.id).then(record => {
-    console.log(record)
     res.send(record)
   })
 })
@@ -24,14 +23,8 @@ router.post('/', function(req, res) {
 })
 
 router.put('/:id', function(req, res) {
-  db.updateUser(req.body).then(() => {
-    res.json({'response': 'user updated'})
-  })
-})
-
-router.delete('/:id', function(req, res) {
-  db.deleteUser(req.params.id).then((id) => {
-    res.json({'response': `user ${id} deleted`})
+  db.updateUser(req.params.id, req.body).then(() => {
+    res.send({response: `User ${req.params.id} has been updated.`})
   })
 })
 
