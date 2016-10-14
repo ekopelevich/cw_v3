@@ -17,11 +17,8 @@ router.get('/:id', function(req, res) {
 })
 
 router.post('/', function(req, res) {
-  console.log('body', req.body)
   db.createStory(req.body).then(idArray => {
-    const id = idArray[0]
-    console.log('post story route, id', id)
-    res.status(201).send({id: id})
+    res.status(201).send({id: idArray[0]})
   })
 })
 
