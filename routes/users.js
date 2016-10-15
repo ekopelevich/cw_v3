@@ -2,6 +2,7 @@
 
 const express = require('express')
 const router = express.Router()
+const stories = require('./stories')
 const db = require('../db/users')
 
 router.get('/', function(req, res) {

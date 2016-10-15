@@ -12,7 +12,7 @@ router.get('/', function(req, res) {
 
 router.use('/auth', auth)
 router.use('/users', users)
-router.use('/users/:id/stories', users)
+router.use('/users/:id/stories', stories)
 router.use('/stories', stories)
 router.use('/stories/:id/chapters', stories)
 
