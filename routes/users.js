@@ -2,7 +2,6 @@
 
 const express = require('express')
 const router = express.Router()
-const stories = require('./stories')
 const db = require('../db/users')
 
 router.get('/', function(req, res) {
@@ -11,8 +10,8 @@ router.get('/', function(req, res) {
   })
 })
 
-router.get('/:id', function(req, res) {
-  db.getUser(req.params.id).then(record => {
+router.get('/:userId', function(req, res) {
+  db.getUser(req.params.userId).then(record => {
     res.send(record)
   })
 })
