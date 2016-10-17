@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.raw())
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(session({secret: 'secret', saveUninitialized: true, resave: false}))
+app.use(session({secret: process.env.SESSION_SECRET, saveUninitialized: true, resave: false}))
 
 app.use(passport.initialize())
 app.use(passport.session())
