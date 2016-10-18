@@ -9,7 +9,11 @@ router.get('/', function(req, res) {
 })
 
 router.get('/:chapterId', function(req, res) {
-  db.getChapter(req.params.chapterId).then(story => res.send(story))
+  console.log(req.params.chapterId)
+  db.getChapter(req.params.chapterId).then(story => {
+    console.log(story)
+    res.send(story)
+  })
 })
 
 router.post('/', function(req, res) {
