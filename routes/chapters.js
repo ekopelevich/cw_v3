@@ -5,8 +5,7 @@ const router = express.Router({mergeParams: true})
 const db = require('../db/chapters')
 
 router.get('/', function(req, res) {
-  console.log('CHAPTERRRRSSSS')
-  db.getStoryChapters(req.params.storyId).then(stories => res.send({ data: stories }))
+  db.getStoryChapters(req.params.storyId).then(chapters => res.send({ data: chapters }))
 })
 
 router.get('/:id', function(req, res) {
