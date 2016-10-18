@@ -14,9 +14,9 @@ router.get('/', function(req, res) {
 
 router.use('/auth', auth)
 router.use('/users', users)
-router.use('/users/:userId/stories', stories)
+router.use('/users/:id/stories', stories)
 router.use('/stories', stories)
-router.use('/stories/:storyId/chapters', chapters)
+router.use('/stories/:id/chapters', chapters)
 router.use('/genres', genres)
 
 module.exports = router

@@ -5,23 +5,24 @@ const router = express.Router({mergeParams: true})
 const db = require('../db/chapters')
 
 router.get('/', function(req, res) {
-  db.getStoryChapters(req.params.storyId).then(chapters => res.send({ data: chapters }))
+  db.getStoryChapters(req.params.id).then(chapters => res.send({ data: chapters }))
 })
 
-router.get('/:id', function(req, res) {
-  db.getChapter(req.params.id).then(story => res.send(story))
+router.get('/:chapterId', function(req, res) {
+  db.getChapter(req.params.chapterId).then(story => res.send(story))
 })
 
 router.post('/', function(req, res) {
-  db.createChapter(req.body).then(idArray => res.status(201).send({id: idArray[0]}))
+  console.log('post chapter route', req.body)
+  db.createChapter(req.body).then(response => res.status(201).send({data: response}))
 })
 
-router.put('/:id', function(req, res) {
-  db.updateChapter(req.params.id).then(id => res.send(id))
+router.put('/:chapterId', function(req, res) {
+  db.updateChapter(req.params.chapterId).then(id => res.send(id))
 })
 
-router.delete('/:id', function(req, res) {
-  db.deleteChapter(req.params.id).then(id => res.send(id))
+router.delete('/:chapterId', function(req, res) {
+  db.deleteChapter(req.params.chapterId).then(id => res.send(id))
 })
 
 module.exports = router
