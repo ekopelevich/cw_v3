@@ -5,6 +5,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const express = require('express')
+const app = express()
 const path = require('path')
 const logger = require('morgan')
 const cookieParser = require('cookie-parser')
@@ -14,7 +15,7 @@ const index = require('./routes/index')
 const session = require('express-session')
 const passport = require('passport')
 const Strategy = require('passport-twitter').Strategy
-const app = express()
+const db = require('./db/users')
 
 app.use(cors())
 app.use(logger('dev'))
@@ -28,6 +29,7 @@ app.use(session({secret: process.env.SESSION_SECRET, saveUninitialized: true, re
 
 app.use(passport.initialize())
 app.use(passport.session())
+
 passport.serializeUser(function(user, done) {
   done(null, user)
 })
@@ -40,10 +42,10 @@ passport.use(new Strategy({
   consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
   callbackURL: 'http://localhost:3000/api/v1/auth/twitter/callback',
 },
-function(token, tokenSecret, profile, cb) {
+function(token, tokenSecret, profile, done) {
   // db.findOrCreate(profile, function(err, user) {
-  //   if (err) return cb(err)
-  cb(null, profile)
+  //   if (err) return done(err, null)
+    done(null, profile)
   // })
 }))
 

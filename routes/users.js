@@ -5,6 +5,7 @@ const router = express.Router()
 const db = require('../db/users')
 
 router.get('/', function(req, res) {
+  console.log('req.isAuthenticated', req.isAuthenticated())
   db.getAllUsers().then(records => {
     res.send(records)
   })
