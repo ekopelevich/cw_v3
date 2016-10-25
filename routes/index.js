@@ -18,6 +18,7 @@ router.use('/users', users)
 router.use('/users/:id/stories', stories)
 router.use('/stories', stories)
 router.use('/stories/:id/chapters', chapters)
+router.use('/chapters', chapters)
 router.use('/genres', genres)
 router.use('/favorites', favorites)
 

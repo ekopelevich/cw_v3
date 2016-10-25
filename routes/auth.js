@@ -25,10 +25,13 @@ router.get('/twitter/callback', passport.authenticate('twitter', {
 }))
 
 router.get('/success', (req, res) => {
+  console.log('user id', req.user[0].id)
+  console.log('passport user', req.session.passport.user)
+  req.session.user = req.user[0]
   if (!req.session.passport) req.app.locals.user = null
-  else req.app.locals.user = req.session.passport.user
-  console.log(req.app.locals.user.id)
-  res.redirect(`${process.env.CLIENT_HOST}/#/users/${req.app.locals.user.id}/dashboard/profile`)
+  else req.app.locals.user = req.session.passport.user[0]
+  console.log('userid', req.app.locals.user.id)
+  res.redirect(`${process.env.CLIENT_HOST}/#/users/${req.app.locals.user}/dashboard`)
 })
 
 router.get('/fail', (req, res) => {
@@ -36,7 +39,7 @@ router.get('/fail', (req, res) => {
 })
 
 router.get('/logout', (req, res) => {
-  req.app.locals.user = null
+  req.user = null
   res.redirect(process.env.CLIENT_HOST)
 })
 

@@ -3,9 +3,6 @@
 var knex = require('./knex')
 
 module.exports = {
-  getUserFavorites(id){
-    return knex('favorites').where('id', id).first()
-  },
   setFavorite(data){
     console.log('data', data)
     return knex('favorites')

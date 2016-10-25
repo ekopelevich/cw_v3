@@ -8,12 +8,13 @@ router.get('/', function(req, res) {
   db.getStoryChapters(req.params.id).then(chapters => res.send({ data: chapters }))
 })
 
+router.get('/pending', function(req, res) {
+  console.log(req.query)
+  db.getChapter(req.params.chapterId).then(story => res.send(story))
+})
+
 router.get('/:chapterId', function(req, res) {
-  console.log(req.params.chapterId)
-  db.getChapter(req.params.chapterId).then(story => {
-    console.log(story)
-    res.send(story)
-  })
+  db.getChapter(req.params.chapterId).then(story => res.send(story))
 })
 
 router.post('/', function(req, res) {

@@ -29,4 +29,10 @@ router.put('/:id', function(req, res) {
   })
 })
 
+router.get('/:userId/favorites', function(req, res) {
+  db.getFavoritesByUser(req.params.userId).then(record => {
+    res.send(record)
+  })
+})
+
 module.exports = router

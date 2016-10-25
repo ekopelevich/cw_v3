@@ -13,9 +13,27 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const index = require('./routes/index')
 const session = require('express-session')
+
 const passport = require('passport')
 const Strategy = require('passport-twitter').Strategy
 const db = require('./db/users')
+
+passport.use(new Strategy({
+  consumerKey: process.env.TWITTER_CONSUMER_KEY,
+  consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+  callbackURL: 'http://localhost:3000/api/v1/auth/twitter/callback',
+},
+function(token, tokenSecret, profile, cb) {
+  db.findOrCreate(profile, token, tokenSecret)
+  .then(user => cb(null, user))
+}))
+
+passport.serializeUser(function(user, cb) {
+  cb(null, user)
+})
+passport.deserializeUser(function(obj, cb) {
+  cb(null, obj)
+})
 
 app.use(cors())
 app.use(logger('dev'))
@@ -25,36 +43,16 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.raw())
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(session({secret: process.env.SESSION_SECRET, saveUninitialized: true, resave: false}))
 
-app.use(passport.initialize())
-app.use(passport.session())
-
-passport.serializeUser(function(user, done) {
-  done(null, user)
-})
-passport.deserializeUser(function(user, done) {
-  done(null, user)
-})
-
-passport.use(new Strategy({
-  consumerKey: process.env.TWITTER_CONSUMER_KEY,
-  consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-  callbackURL: 'http://localhost:3000/api/v1/auth/twitter/callback',
-},
-function(token, tokenSecret, profile, done) {
-  // db.findOrCreate(profile, function(err, user) {
-  //   if (err) return done(err, null)
-    done(null, profile)
-  // })
-}))
-
-app.all('/*', function(req, res, next) {
+app.all((req, res, next) => {
   res.header('Access-Control-Allow-Origin', process.env.CLIENT_HOST)
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,HEAD,DELETE,OPTIONS')
   res.header('Access-Control-Allow-Headers', 'Authorization')
   next()
 })
+
+app.use(session({secret: process.env.SESSION_SECRET, saveUninitialized: true, resave: true}))
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use('/api/v1', index)
 
