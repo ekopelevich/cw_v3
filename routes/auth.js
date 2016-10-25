@@ -9,6 +9,7 @@ const router = express.Router()
 const passport = require('passport')
 
 router.get('/', (req, res) => {
+  console.log('auth route', req.app.locals.user)
   if (!req.app.locals.user) res.end()
   res.send({user: req.app.locals.user})
 })
@@ -25,13 +26,12 @@ router.get('/twitter/callback', passport.authenticate('twitter', {
 }))
 
 router.get('/success', (req, res) => {
-  console.log('user id', req.user[0].id)
-  console.log('passport user', req.session.passport.user)
-  req.session.user = req.user[0]
-  if (!req.session.passport) req.app.locals.user = null
-  else req.app.locals.user = req.session.passport.user[0]
-  console.log('userid', req.app.locals.user.id)
-  res.redirect(`${process.env.CLIENT_HOST}/#/users/${req.app.locals.user}/dashboard`)
+  console.log('req.session.passport.user', req.session.passport.user)
+  req.app.locals.user = req.session.passport.user
+  console.log('req.app.locals.user', req.app.locals.user)
+  if (!req.session) req.app.locals.user = null
+  else req.app.locals.user = req.session.passport.user
+  res.redirect(process.env.CLIENT_HOST)
 })
 
 router.get('/fail', (req, res) => {
@@ -39,7 +39,7 @@ router.get('/fail', (req, res) => {
 })
 
 router.get('/logout', (req, res) => {
-  req.user = null
+  req.app.locals.user = null
   res.redirect(process.env.CLIENT_HOST)
 })
 

@@ -25,7 +25,7 @@ passport.use(new Strategy({
 },
 function(token, tokenSecret, profile, cb) {
   db.findOrCreate(profile, token, tokenSecret)
-  .then(user => cb(null, user))
+  .then(user => cb(null, user[0]))
 }))
 
 passport.serializeUser(function(user, cb) {

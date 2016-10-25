@@ -5,7 +5,6 @@ const router = express.Router({mergeParams: true})
 const db = require('../db/stories')
 
 router.get('/', function(req, res) {
-  console.log('req: ', req.session.user)
   if (req.params.userId) db.getUserStories().then(stories => res.send({ data: stories }))
   db.getAllStories().then(stories => res.send({ data: stories }))
 })
