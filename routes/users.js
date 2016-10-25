@@ -11,8 +11,15 @@ router.get('/', function(req, res) {
   })
 })
 
-router.get('/:userId', function(req, res) {
-  db.getUser(req.params.userId).then(record => {
+router.get('/:id/favorites', function(req, res) {
+  db.getFavoritesByUser(req.params.id).then(records => {
+    console.log('records', records)
+    res.send(records)
+  })
+})
+
+router.get('/:id', function(req, res) {
+  db.getUser(req.params.id).then(record => {
     res.send(record)
   })
 })
@@ -26,12 +33,6 @@ router.post('/', function(req, res) {
 router.put('/:id', function(req, res) {
   db.updateUser(req.params.id, req.body).then(() => {
     res.send({response: `User ${req.params.id} has been updated.`})
-  })
-})
-
-router.get('/:userId/favorites', function(req, res) {
-  db.getFavoritesByUser(req.params.userId).then(record => {
-    res.send(record)
   })
 })
 

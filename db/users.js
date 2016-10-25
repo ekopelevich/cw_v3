@@ -7,8 +7,7 @@ module.exports = {
     return knex('users')
   },
   getUser(id) {
-    return knex('users')
-    .where('users.id', id).first()
+    return knex('users').where('users.id', id).first()
   },
   findOrCreate(profile, token, tokenSecret) {
     return knex('users')
@@ -40,31 +39,19 @@ module.exports = {
       twitter_token: token,
       twitter_secret: tokenSecret,
     }
-    return knex('users')
-    .where('users.id', user.id)
-    .update(twitterTokens, '*')
+    return knex('users').where('users.id', user.id).update(twitterTokens, '*')
   },
   updateUser(user) {
-    return knex('users')
-    .where('users.id', user.id)
+    return knex('users').where('users.id', user.id)
     .then((user) => {
       if (!user) 'This user does not exist'
-      return knex('users')
-      .where('users.id', user.id)
-      .update(user, 'id')
+      return knex('users').where('users.id', user.id).update(user, 'id')
     })
   },
   deleteUser(id){
-    return knex('users')
-    .where('users.id', id)
-    .del()
+    return knex('users').where('users.id', id).del()
   },
   getFavoritesByUser(id){
-    return knex('favorites')
-    .where('favorites.user_id', id)
-    .then(favorites => {
-      return knex('stories')
-      .where('stories.id', favorites.story_id)
-    })
-  }
+    return knex('favorites').where('favorites.user_id', id)
+  },
 }
