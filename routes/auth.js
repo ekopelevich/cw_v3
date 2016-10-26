@@ -9,7 +9,6 @@ const router = express.Router()
 const passport = require('passport')
 
 router.get('/', (req, res) => {
-  console.log('auth route', req.app.locals.user)
   if (!req.app.locals.user) res.end()
   res.send({user: req.app.locals.user})
 })

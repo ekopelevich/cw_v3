@@ -13,7 +13,6 @@ router.get('/', function(req, res) {
 
 router.get('/:id/favorites', function(req, res) {
   db.getFavoritesByUser(req.params.id).then(records => {
-    console.log('records', records)
     res.send(records)
   })
 })

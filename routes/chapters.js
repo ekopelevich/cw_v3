@@ -9,8 +9,11 @@ router.get('/', function(req, res) {
 })
 
 router.get('/pending', function(req, res) {
-  console.log(req.query)
-  db.getChapter(req.params.chapterId).then(story => res.send(story))
+  console.log('this is the pending route', req.query.id, req.query.type)
+  db.getPendingChapters(req.query.id, req.query.type).then(chapters => {
+    console.log('chapters', chapters)
+    res.send(chapters)
+  })
 })
 
 router.get('/:chapterId', function(req, res) {
@@ -18,7 +21,6 @@ router.get('/:chapterId', function(req, res) {
 })
 
 router.post('/', function(req, res) {
-  console.log('post chapter route', req.body)
   db.createChapter(req.body).then(response => res.status(201).send({data: response}))
 })
 
