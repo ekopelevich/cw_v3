@@ -4,7 +4,7 @@ exports.up = function(knex) {
     table.integer('user_id').unsigned().references('users.id')
     table.integer('story_id').unsigned().references('stories.id')
     table.string('title')
-    table.string('body')
+    table.text('body')
     table.string('image')
     table.integer('state_id').unsigned().references('states.id')
     table.timestamp('created_at')

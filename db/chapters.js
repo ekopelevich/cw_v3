@@ -21,17 +21,7 @@ module.exports = {
     return knex('chapters').where('chapters.id', id).first()
   },
   createChapter(chapter){
-    console.log(chapter)
-    const newChapter = {
-      user_id: chapter.user_id,
-      story_id: chapter.story_id,
-      title: chapter.title,
-      body: chapter.body,
-      image: chapter.image,
-      state_id: 1,
-      created_at: Date.now(),
-    }
-    return knex('chapters').insert(newChapter, 'id')
+    return knex('chapters').insert(chapter, 'id')
   },
   updateChapter(id, chapter){
     return knex('chapters').where('chapters.id', id).update(chapter)

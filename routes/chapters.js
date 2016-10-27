@@ -3,6 +3,7 @@
 const express = require('express')
 const router = express.Router({mergeParams: true})
 const db = require('../db/chapters')
+const moment = require('moment')
 
 router.get('/', function(req, res) {
   db.getStoryChapters(req.params.id).then(chapters => res.send({ data: chapters }))
@@ -21,7 +22,16 @@ router.get('/:chapterId', function(req, res) {
 })
 
 router.post('/', function(req, res) {
-  db.createChapter(req.body).then(response => res.status(201).send({data: response}))
+  const newChapter = {
+    user_id: req.body.user_id,
+    story_id: req.body.story_id,
+    title: req.body.title,
+    body: req.body.body,
+    image: req.body.image,
+    state_id: 2,
+  }
+  console.log(newChapter)
+  db.createChapter(newChapter).then(response => res.status(201).send(response))
 })
 
 router.put('/:chapterId', function(req, res) {
