@@ -13,27 +13,11 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const index = require('./routes/index')
 const session = require('express-session')
-
+const RedisStore = require('connect-redis')(express)
+// const cookieSession = require('cookie-session')
 const passport = require('passport')
 const Strategy = require('passport-twitter').Strategy
 const db = require('./db/users')
-
-passport.use(new Strategy({
-  consumerKey: process.env.TWITTER_CONSUMER_KEY,
-  consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-  callbackURL: 'http://localhost:3000/api/v1/auth/twitter/callback',
-},
-function(token, tokenSecret, profile, cb) {
-  db.findOrCreate(profile, token, tokenSecret)
-  .then(user => cb(null, user[0]))
-}))
-
-passport.serializeUser(function(user, cb) {
-  cb(null, user)
-})
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj)
-})
 
 app.use(cors())
 app.use(logger('dev'))
@@ -44,15 +28,50 @@ app.use(bodyParser.raw())
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.all((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', process.env.CLIENT_HOST)
-  res.header('Access-Control-Allow-Headers', 'Authorization')
-  next()
+app.use(session({
+  store: new RedisStore,
+  secret: process.env.KEY1,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true },
+}))
+// app.use(cookieSession({name: 'cwSession', keys: [process.env.KEY1, process.env.KEY2]}))
+app.use(passport.initialize())
+app.use(passport.session()) //read to and write from sessions on every request
+
+passport.use(new Strategy({
+  consumerKey: process.env.TWITTER_CONSUMER_KEY,
+  consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+  callbackURL: 'http://localhost:3000/api/v1/auth/twitter/callback',
+},
+
+// this happens after passport.autheniticate - after the 2 provider API calls were made
+function(token, tokenSecret, profile, cb) {
+  db.findOrCreate(profile, token, tokenSecret)
+  .then(user => {
+    // This runs after the initial login has happened - it probably happens once
+    cb(null, {id: user[0].id, first_name: user[0].first_name, last_name: user[0].last_name})
+  })
+}))
+
+// whatever was passed into the cb in the strategy setup cb, gets passed in here - turns user into session id
+// coding a user
+passport.serializeUser(function(user, cb) {
+  //calling cb here passes data into session
+  cb(null, user)
 })
 
-app.use(session({secret: process.env.SESSION_SECRET, saveUninitialized: true, resave: true}))
-app.use(passport.initialize())
-app.use(passport.session())
+// gets called on every request - find user by id and returns a user
+// looking a user up
+passport.deserializeUser(function(obj, cb) {
+  db.getUser(obj.id).then(user => cb(null, user))
+})
+
+// app.all((req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', process.env.CLIENT_HOST)
+//   res.header('Access-Control-Allow-Headers', 'Authorization')
+//   next()
+// })
 
 app.use('/api/v1', index)
 
