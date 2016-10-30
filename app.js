@@ -13,7 +13,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const index = require('./routes/index')
 const session = require('express-session')
-const RedisStore = require('connect-redis')(express)
+// const RedisStore = require('connect-redis')(express)
 // const cookieSession = require('cookie-session')
 const passport = require('passport')
 const Strategy = require('passport-twitter').Strategy
@@ -29,7 +29,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(session({
-  store: new RedisStore,
+  // store: new RedisStore,
   secret: process.env.KEY1,
   resave: false,
   saveUninitialized: true,
