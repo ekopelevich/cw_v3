@@ -12,9 +12,9 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const index = require('./routes/index')
-const session = require('express-session')
+// const session = require('express-session')
 // const RedisStore = require('connect-redis')(express)
-// const cookieSession = require('cookie-session')
+const cookieSession = require('cookie-session')
 const passport = require('passport')
 const Strategy = require('passport-twitter').Strategy
 const db = require('./db/users')
@@ -28,14 +28,14 @@ app.use(bodyParser.raw())
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.use(session({
-  // store: new RedisStore,
-  secret: process.env.KEY1,
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true },
-}))
-// app.use(cookieSession({name: 'cwSession', keys: [process.env.KEY1, process.env.KEY2]}))
+// app.use(session({
+//   // store: new RedisStore,
+//   secret: process.env.KEY1,
+//   resave: false,
+//   saveUninitialized: true,
+//   cookie: { secure: true },
+// }))
+app.use(cookieSession({name: 'cwSession', keys: [process.env.KEY1, process.env.KEY2]}))
 app.use(passport.initialize())
 app.use(passport.session()) //read to and write from sessions on every request
 
@@ -45,7 +45,7 @@ passport.use(new Strategy({
   callbackURL: 'http://localhost:3000/api/v1/auth/twitter/callback',
 },
 
-// this happens after passport.autheniticate - after the 2 provider API calls were made
+// this happens after passport.authenticate - after the 2 provider API calls were made
 function(token, tokenSecret, profile, cb) {
   db.findOrCreate(profile, token, tokenSecret)
   .then(user => {

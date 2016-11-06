@@ -19,7 +19,7 @@ router.get('/twitter', passport.authenticate('twitter'))
 
 // this route receives the auth 'code' from twitter
 // this second authenticate function makes 2 api calls to github
-// tp compare user credentials and get user info back
+// to compare user credentials and get user info back
 router.get('/twitter/callback', passport.authenticate('twitter', {
   successRedirect: process.env.SERVER_HOST + '/auth/success',
   failureRedirect: process.env.SERVER_HOST + '/auth/fail',
