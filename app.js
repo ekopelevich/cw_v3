@@ -57,7 +57,6 @@ passport.serializeUser(function(user, cb) {
 
 // Gets called on every request - find user by id and returns a user
 passport.deserializeUser(function(obj, cb) {
-  console.log('deserializing user', obj)
   db.getUser(obj.id).then(user => cb(null, user))
 })
 
