@@ -9,7 +9,8 @@ const router = express.Router()
 const passport = require('passport')
 
 router.get('/', (req, res) => {
-  if (req.user) res.send({user: req.user})
+  if (req.isAuthenticated()) res.send({user: req.user})
+  else res.end()
 })
 
 // Redirects to Twitter - first API call in auth process
@@ -18,16 +19,12 @@ router.get('/twitter', passport.authenticate('twitter'))
 // This route receives the auth 'code' from Twitter
 // The cb makes 2 api calls to Twitter to compare user credentials and get user info back
 router.get('/twitter/callback', passport.authenticate('twitter', {
-  successRedirect: process.env.SERVER_HOST + '/auth/success',
-  failureRedirect: process.env.SERVER_HOST + '/auth/fail',
+  successRedirect: '/api/v1/auth/success',
+  failureRedirect: process.env.CLIENT_HOST,
 }))
 
 router.get('/success', (req, res) => {
-  res.redirect(process.env.CLIENT_HOST)
-})
-
-router.get('/fail', (req, res) => {
-  res.redirect(process.env.CLIENT_HOST)
+  res.redirect(`${process.env.CLIENT_HOST}/#/users/${req.user.id}/profile`)
 })
 
 router.get('/logout', (req, res) => {
