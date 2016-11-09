@@ -1,11 +1,10 @@
 'use strict'
 
 const express = require('express')
-const router = express.Router({mergeParams: true})
+const router = express.Router() //{mergeParams: true}
 const db = require('../db/stories')
 
 router.get('/', function(req, res) {
-  console.log('stories - req.isAuthenticated()', req.isAuthenticated())
   if (req.params.userId) db.getUserStories().then(stories => res.send({ data: stories }))
   db.getAllStories().then(stories => res.send({ data: stories }))
 })
