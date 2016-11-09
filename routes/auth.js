@@ -10,8 +10,8 @@ const passport = require('passport')
 
 router.get('/', (req, res) => {
   console.log('auth - req.user', req.user)
-  if (!req.app.locals.user) res.end()
-  res.send({user: req.app.locals.user})
+  if (!req.user) res.end()
+  res.send({user: req.user})
 })
 
 // this first method redirects to github

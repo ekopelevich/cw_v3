@@ -12,14 +12,18 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const index = require('./routes/index')
-// const session = require('express-session')
-// const RedisStore = require('connect-redis')(express)
 const cookieSession = require('cookie-session')
 const passport = require('passport')
 const Strategy = require('passport-twitter').Strategy
 const db = require('./db/users')
 
-app.use(cors())
+const corsOptions = {
+  origin: 'http://localhost:8000',
+  optionsSuccessStatus: 200,
+  credentials: true,
+}
+
+app.use(cors(corsOptions))
 app.use(logger('dev'))
 app.use(bodyParser.json({ type: 'application/*+json' }))
 app.use(bodyParser.json())
@@ -27,14 +31,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.raw())
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
-
-// app.use(session({
-//   // store: new RedisStore,
-//   secret: process.env.KEY1,
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: { secure: true },
-// }))
 app.use(cookieSession({name: 'cwSession', keys: [process.env.KEY1, process.env.KEY2]}))
 app.use(passport.initialize())
 app.use(passport.session()) //read to and write from sessions on every request
@@ -57,6 +53,7 @@ function(token, tokenSecret, profile, cb) {
 // whatever was passed into the cb in the strategy setup cb, gets passed in here - turns user into session id
 // coding a user
 passport.serializeUser(function(user, cb) {
+  console.log('serializing user', user)
   //calling cb here passes data into session
   cb(null, user)
 })
@@ -64,6 +61,7 @@ passport.serializeUser(function(user, cb) {
 // gets called on every request - find user by id and returns a user
 // looking a user up
 passport.deserializeUser(function(obj, cb) {
+  console.log('deserializing user', obj)
   db.getUser(obj.id).then(user => cb(null, user))
 })
 
