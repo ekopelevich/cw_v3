@@ -9,28 +9,20 @@ const router = express.Router()
 const passport = require('passport')
 
 router.get('/', (req, res) => {
-  console.log('auth - req.user', req.user)
-  if (!req.user) res.end()
-  res.send({user: req.user})
+  if (req.user) res.send({user: req.user})
 })
 
-// this first method redirects to github
+// Redirects to Twitter - first API call in auth process
 router.get('/twitter', passport.authenticate('twitter'))
 
-// this route receives the auth 'code' from twitter
-// this second authenticate function makes 2 api calls to github
-// to compare user credentials and get user info back
+// This route receives the auth 'code' from Twitter
+// The cb makes 2 api calls to Twitter to compare user credentials and get user info back
 router.get('/twitter/callback', passport.authenticate('twitter', {
   successRedirect: process.env.SERVER_HOST + '/auth/success',
   failureRedirect: process.env.SERVER_HOST + '/auth/fail',
 }))
 
-//
 router.get('/success', (req, res) => {
-  console.log('success - req.user', req.user)
-  req.app.locals.user = req.user
-  if (!req.session) req.app.locals.user = null
-  else req.app.locals.user = req.session.passport.user
   res.redirect(process.env.CLIENT_HOST)
 })
 

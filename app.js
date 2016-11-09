@@ -33,7 +33,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(cookieSession({name: 'cwSession', keys: [process.env.KEY1, process.env.KEY2]}))
 app.use(passport.initialize())
-app.use(passport.session()) //read to and write from sessions on every request
+app.use(passport.session()) // Reads to and writes from sessions on every request
 
 passport.use(new Strategy({
   consumerKey: process.env.TWITTER_CONSUMER_KEY,
@@ -41,35 +41,25 @@ passport.use(new Strategy({
   callbackURL: 'http://localhost:3000/api/v1/auth/twitter/callback',
 },
 
-// this happens after passport.authenticate - after the 2 provider API calls were made
+// This happens after passport.authenticate - after the 2 provider API calls are made
 function(token, tokenSecret, profile, cb) {
   db.findOrCreate(profile, token, tokenSecret)
   .then(user => {
-    // This runs after the initial login has happened - it probably happens once
+    // Runs after the initial login
     cb(null, {id: user[0].id, first_name: user[0].first_name, last_name: user[0].last_name})
   })
 }))
 
-// whatever was passed into the cb in the strategy setup cb, gets passed in here - turns user into session id
-// coding a user
+// Turns user into session id encoding a user
 passport.serializeUser(function(user, cb) {
-  console.log('serializing user', user)
-  //calling cb here passes data into session
-  cb(null, user)
+  cb(null, user) // Calling cb here passes data into session
 })
 
-// gets called on every request - find user by id and returns a user
-// looking a user up
+// Gets called on every request - find user by id and returns a user
 passport.deserializeUser(function(obj, cb) {
   console.log('deserializing user', obj)
   db.getUser(obj.id).then(user => cb(null, user))
 })
-
-// app.all((req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', process.env.CLIENT_HOST)
-//   res.header('Access-Control-Allow-Headers', 'Authorization')
-//   next()
-// })
 
 app.use('/api/v1', index)
 
