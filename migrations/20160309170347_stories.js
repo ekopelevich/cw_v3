@@ -7,8 +7,11 @@ exports.up = function(knex) {
     table.string('title')
     table.text('summary')
     table.string('cover')
-    table.boolean('isLocked')
-    table.boolean('isActive')
+    table.boolean('is_locked')
+    table.date('lock_time')
+    table.boolean('is_active')
+    table.boolean('is_private')
+    table.boolean('auto_approval')
     table.timestamps()
   })
 }

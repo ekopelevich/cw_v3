@@ -3,11 +3,11 @@ exports.up = function(knex) {
     table.increments()
     table.integer('user_id').unsigned().references('users.id')
     table.integer('story_id').unsigned().references('stories.id')
+    table.integer('state_id').unsigned().references('states.id')
     table.string('title')
     table.text('body')
     table.string('image')
-    table.integer('state_id').unsigned().references('states.id')
-    table.timestamp('created_at')
+    table.timestamps()
   })
 }
 
