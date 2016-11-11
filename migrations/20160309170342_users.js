@@ -7,7 +7,7 @@ exports.up = function(knex) {
     table.string('email')
     table.string('phone')
     table.string('location')
-    table.string('tag_line')
+    table.string('tagline')
     table.text('bio')
     table.string('avatar')
     table.boolean('is_banned')
