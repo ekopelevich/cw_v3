@@ -32,7 +32,7 @@ module.exports = {
       twitter_secret: tokenSecret,
     }
     return knex('users')
-    .insert(cwUser, '*')
+    .insert(cwUser, '*').first()
   },
   setTokens(user, profile, token, tokenSecret){
     const twitterTokens = {

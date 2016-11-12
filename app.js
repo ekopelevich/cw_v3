@@ -46,7 +46,7 @@ function(token, tokenSecret, profile, cb) {
   db.findOrCreate(profile, token, tokenSecret)
   .then(user => {
     // Runs after the initial login
-    cb(null, {id: user[0].id, first_name: user[0].first_name, last_name: user[0].last_name})
+    cb(null, {id: user.id, first_name: user.first_name, last_name: user.last_name})
   })
 }))
 
