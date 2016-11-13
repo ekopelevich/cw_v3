@@ -1,5 +1,6 @@
 exports.seed = function(knex, Promise) {
   return Promise.all([
+    knex('notifications').del(),
     knex('preferences').del(),
     knex('backgrounds').del(),
     knex('fonts').del(),
