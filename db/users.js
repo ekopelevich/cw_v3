@@ -10,6 +10,7 @@ module.exports = {
     return knex('users').where('users.id', id).first()
   },
   findOrCreate(profile, token, tokenSecret) {
+    console.log('findOrCreate', profile.id)
     return knex('users')
     .where('users.id', profile.id).first()
     .then(user => {
@@ -18,16 +19,15 @@ module.exports = {
     })
   },
   createUser(profile, token, tokenSecret) {
+    console.log('create')
     const cwUser = {
       id: profile._json.id,
       first_name: profile._json.name.split(' ')[0],
       last_name: profile._json.name.split(' ')[1],
-      email: '',
       location: profile._json.location,
       bio: profile._json.description,
       avatar: profile._json.profile_image_url,
-      isBanned: false,
-      isActive: true,
+      twitter_id: profile._json.id,
       twitter_token: token,
       twitter_secret: tokenSecret,
     }
