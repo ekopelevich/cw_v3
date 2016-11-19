@@ -10,20 +10,18 @@ module.exports = {
     return knex('users').where('users.id', id).first()
   },
   findOrCreate(profile, token, tokenSecret) {
-    console.log('findOrCreate', profile.id)
     return knex('users')
-    .where('users.id', profile.id).first()
+    .where('users.twitter_id', profile.id).first()
     .then(user => {
       if (!user) return this.createUser(profile, token, tokenSecret)
       else return this.setTokens(user, profile, token, tokenSecret)
     })
   },
   createUser(profile, token, tokenSecret) {
-    console.log('create')
-    const cwUser = {
-      id: profile._json.id,
+    const newUser = {
       first_name: profile._json.name.split(' ')[0],
       last_name: profile._json.name.split(' ')[1],
+      username: profile._json.screen_name,
       location: profile._json.location,
       bio: profile._json.description,
       avatar: profile._json.profile_image_url,
@@ -31,8 +29,7 @@ module.exports = {
       twitter_token: token,
       twitter_secret: tokenSecret,
     }
-    return knex('users')
-    .insert(cwUser, '*').first()
+    return knex('users').returning('*').insert(newUser)
   },
   setTokens(user, profile, token, tokenSecret){
     const twitterTokens = {

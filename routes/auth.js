@@ -9,6 +9,7 @@ const router = express.Router()
 const passport = require('passport')
 
 router.get('/', (req, res) => {
+  console.log(req.isAuthenticated(), req.user)
   if (req.isAuthenticated()) res.send({user: req.user})
   else res.end()
 })
@@ -30,6 +31,12 @@ router.get('/success', (req, res) => {
 router.get('/logout', (req, res) => {
   req.logout()
   res.redirect(process.env.CLIENT_HOST)
+})
+
+router.get('/:id', (req, res) => {
+  console.log(req.params.id, req.user.id)
+  if (req.params.id === req.user.id) res.send({authorized: true})
+  else res.send({authorized: false})
 })
 
 module.exports = router
