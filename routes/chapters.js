@@ -3,19 +3,19 @@
 const express = require('express')
 const router = express.Router({mergeParams: true})
 const db = require('../db/chapters')
-const moment = require('moment')
+// const moment = require('moment')
 
 router.get('/', function(req, res) {
   db.getStoryChapters(req.params.id).then(chapters => res.send({ data: chapters }))
 })
 
-router.get('/pending', function(req, res) {
-  console.log('this is the pending route', req.query.id, req.query.type)
-  db.getPendingChapters(req.query.id, req.query.type).then(chapters => {
-    console.log('chapters', chapters)
-    res.send(chapters)
-  })
-})
+// router.get('/pending', function(req, res) {
+//   console.log('this is the pending route', req.query.id, req.query.type)
+//   db.getPendingChapters(req.query.id, req.query.type).then(chapters => {
+//     console.log('chapters', chapters)
+//     res.send(chapters)
+//   })
+// })
 
 router.get('/:chapterId', function(req, res) {
   db.getChapter(req.params.chapterId).then(story => res.send(story))
