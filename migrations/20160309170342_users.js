@@ -10,6 +10,7 @@ exports.up = function(knex) {
     table.string('tagline')
     table.text('bio')
     table.string('avatar')
+    table.boolean('is_active')
     table.boolean('is_banned')
     table.boolean('is_admin')
     table.integer('twitter_id')
