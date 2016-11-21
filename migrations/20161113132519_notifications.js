@@ -1,7 +1,7 @@
 exports.up = function(knex) {
   return knex.schema.createTable('notifications', function(table) {
     table.increments()
-    table.string('title')
+    table.string('name')
     table.text('body')
   })
 }
