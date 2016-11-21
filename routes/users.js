@@ -30,8 +30,9 @@ router.post('/', function(req, res) {
 })
 
 router.put('/:id', function(req, res) {
-  db.updateUser(req.params.id, req.body).then(() => {
-    res.send({response: `User ${req.params.id} has been updated.`})
+  console.log(req.params.id, req.body)
+  db.updateUser(req.params.id, req.body).then(id => {
+    res.send({response: `User ${id} has been updated.`})
   })
 })
 

@@ -36,14 +36,10 @@ module.exports = {
       twitter_token: token,
       twitter_secret: tokenSecret,
     }
-    return knex('users').where('users.id', user.id).update(twitterTokens, '*')
+    return knex('users').where('users.id', user.id).update(twitterTokens)
   },
-  updateUser(user) {
-    return knex('users').where('users.id', user.id)
-    .then((user) => {
-      if (!user) 'This user does not exist'
-      return knex('users').where('users.id', user.id).update(user, 'id')
-    })
+  updateUser(id, user) {
+    return knex('users').where('users.id', id).returning('id').update(user)
   },
   deleteUser(id){
     return knex('users').where('users.id', id).del()
