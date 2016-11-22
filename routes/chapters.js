@@ -18,7 +18,7 @@ router.get('/', function(req, res) {
 // })
 
 router.get('/:chapterId', function(req, res) {
-  db.getChapter(req.params.chapterId).then(story => res.send(story))
+  db.getChapter(req.params.chapterId).then(story => res.status(200).send(story))
 })
 
 router.post('/', function(req, res) {
@@ -30,8 +30,9 @@ router.post('/', function(req, res) {
     image: req.body.image,
     state_id: 2,
   }
-  console.log(newChapter)
-  db.createChapter(newChapter).then(response => res.status(201).send(response))
+  db.createChapter(newChapter).then(response => {
+    res.status(201).send({id: response[0]})
+  })
 })
 
 router.put('/:chapterId', function(req, res) {
@@ -39,7 +40,7 @@ router.put('/:chapterId', function(req, res) {
 })
 
 router.delete('/:chapterId', function(req, res) {
-  db.deleteChapter(req.params.chapterId).then(id => res.send(id))
+  db.deleteChapter(req.params.chapterId).then(id => res.status(200).send({id: id}))
 })
 
 module.exports = router
