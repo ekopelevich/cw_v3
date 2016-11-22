@@ -37,7 +37,6 @@ router.get('/logout', (req, res) => {
 router.get('/:id', (req, res) => {
   storyDb.getStory(req.params.id)
   .then(story => {
-    console.log(story)
     if (story.user_id === req.user.id) res.send({authorized: true})
     else res.send({authorized: false})
   })
