@@ -7,6 +7,7 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express')
 const router = express.Router()
 const passport = require('passport')
+const storyDb = require('../db/stories')
 
 router.get('/', (req, res) => {
   if (req.isAuthenticated()) res.send({user: req.user})
@@ -32,9 +33,14 @@ router.get('/logout', (req, res) => {
   res.redirect(process.env.CLIENT_HOST)
 })
 
+// Checks if user is authorized based on resource id and logged in user id
 router.get('/:id', (req, res) => {
-  if (req.params.id == req.user.id) res.send({authorized: true})
-  else res.send({authorized: false})
+  storyDb.getStory(req.params.id)
+  .then(story => {
+    console.log(story)
+    if (story.user_id === req.user.id) res.send({authorized: true})
+    else res.send({authorized: false})
+  })
 })
 
 module.exports = router
