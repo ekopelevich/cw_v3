@@ -1,7 +1,7 @@
 'use strict'
 
 const express = require('express')
-const router = express.Router() //{mergeParams: true}
+const router = express.Router() 
 const db = require('../db/stories')
 
 router.get('/', function(req, res) {
@@ -14,7 +14,7 @@ router.get('/:id', function(req, res) {
 })
 
 router.post('/', function(req, res) {
-  db.createStory(req.body).then(idArray => res.status(201).send({id: idArray[0]}))
+  db.createStory(req.body).then(idArray => res.status(201).send({ id: idArray[0] }))
 })
 
 router.put('/:id', function(req, res) {
