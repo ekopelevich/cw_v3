@@ -33,7 +33,6 @@ router.get('/logout', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-  console.log(req.params.id, req.user.id)
   if (req.params.id == req.user.id) res.send({authorized: true})
   else res.send({authorized: false})
 })

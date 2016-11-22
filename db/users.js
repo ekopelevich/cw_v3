@@ -36,10 +36,10 @@ module.exports = {
       twitter_token: token,
       twitter_secret: tokenSecret,
     }
-    return knex('users').where('users.id', user.id).update(twitterTokens)
+    return knex('users').where('users.id', user.id).update(twitterTokens, '*')
   },
   updateUser(id, user) {
-    return knex('users').where('users.id', id).returning('id').update(user)
+    return knex('users').where('users.id', id).update(user, 'id')
   },
   deleteUser(id){
     return knex('users').where('users.id', id).del()
