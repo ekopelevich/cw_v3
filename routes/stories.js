@@ -1,7 +1,7 @@
 'use strict'
 
 const express = require('express')
-const router = express.Router() 
+const router = express.Router()
 const db = require('../db/stories')
 
 router.get('/', function(req, res) {
@@ -18,11 +18,11 @@ router.post('/', function(req, res) {
 })
 
 router.put('/:id', function(req, res) {
-  db.updateStory(req.params.id).then(id => res.send(id))
+  db.updateStory(req.params.id).then(id => res.send({ id: id }))
 })
 
 router.delete('/:id', function(req, res) {
-  db.deleteStory(req.params.id).then(id => res.send(id))
+  db.deleteStory(req.params.id).then(id => res.send({ id: id }))
 })
 
 module.exports = router

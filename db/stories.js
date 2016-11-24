@@ -13,19 +13,17 @@ module.exports = {
     return knex('stories').where('stories.user_id', userId)
   },
   getStory(id){
-    return knex('stories')
-    .where('stories.id', id).first()
+    return knex('stories').where('stories.id', id).first()
   },
   createStory(story){
     return knex('stories').insert(story, 'id')
   },
   updateStory(story){
-    return knex('stories')
-    .where('stories.id', story.id)
-    .update(story)
+    return knex('stories').where('stories.id', story.id).update(story)
   },
   deleteStory(id){
-    return knex('stories').del()
-      .where('stories.id', id)
+    return knex('chapters').del().where('chapters.story_id', id)
+    .then(() => knex('favorites').del().where('favorites.story_id', id))
+    .then(() => knex('stories').del().where('stories.id', id))
   },
 }
