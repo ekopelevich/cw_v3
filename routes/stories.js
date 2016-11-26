@@ -1,12 +1,13 @@
 'use strict'
 
 const express = require('express')
-const router = express.Router()
+const router = express.Router({ mergeParams: true })
 const db = require('../db/stories')
 
 router.get('/', function(req, res) {
-  if (req.params.userId) db.getUserStories().then(stories => res.send({ data: stories }))
-  db.getAllStories().then(stories => res.send({ data: stories }))
+  console.log('here', req.params.id)
+  if (req.params.id) db.getStoriesByUser(req.params.id).then(stories => res.send({ data: stories }))
+  else db.getAllStories().then(stories => res.send({ data: stories }))
 })
 
 router.get('/:id', function(req, res) {
