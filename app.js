@@ -31,7 +31,12 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.raw())
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(cookieSession({name: 'cwSession', keys: [process.env.KEY1, process.env.KEY2], maxAge: 3 * 60 * 60 * 1000}))
+app.use(cookieSession({
+  name: 'cwSession',
+  keys: [process.env.KEY1, process.env.KEY2],
+  maxAge: 3 * 60 * 60 * 1000,
+  cookie: { secure: false },
+}))
 app.use(passport.initialize())
 app.use(passport.session()) // Reads to and writes from sessions on every request
 
