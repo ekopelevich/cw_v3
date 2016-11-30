@@ -51,10 +51,16 @@ function(token, tokenSecret, profile, cb) {
 }))
 
 // Turns user into session id encoding a user
-passport.serializeUser((user, cb) => cb(null, user)) // Calling cb here passes data into session
+passport.serializeUser((user, cb) => {
+  console.log('serialize')
+  cb(null, user) // Calling cb here passes data into session
+})
 
 // Called on every request - finds user by id and returns a user
-passport.deserializeUser((user, cb) => db.getUser(user.id).then(user => cb(null, user)))
+passport.deserializeUser((user, cb) => {
+  console.log('deserialize')
+  db.getUser(user.id).then(user => cb(null, user))
+})
 
 app.use('/api/v1', index)
 
