@@ -18,7 +18,7 @@ const Strategy = require('passport-twitter').Strategy
 const db = require('./db/users')
 
 const corsOptions = {
-  origin: 'http://localhost:8000',
+  origin: process.env.CLIENT_HOST,
   optionsSuccessStatus: 200,
   credentials: true,
 }
@@ -38,7 +38,7 @@ app.use(passport.session()) // Reads to and writes from sessions on every reques
 passport.use(new Strategy({
   consumerKey: process.env.TWITTER_CONSUMER_KEY,
   consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-  callbackURL: 'http://localhost:3000/api/v1/auth/twitter/callback',
+  callbackURL: `${process.env.SERVER_HOST}/auth/twitter/callback`,
 },
 
 // This happens after passport.authenticate - after the 2 provider API calls are made
