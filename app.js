@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.raw())
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(cookieSession({name: 'cwSession', keys: [process.env.KEY1, process.env.KEY2]}))
+app.use(cookieSession({name: 'cwSession', keys: [process.env.KEY1, process.env.KEY2], maxAge: 3 * 60 * 60 * 1000}))
 app.use(passport.initialize())
 app.use(passport.session()) // Reads to and writes from sessions on every request
 
@@ -46,26 +46,20 @@ function(token, tokenSecret, profile, cb) {
   db.findOrCreate(profile, token, tokenSecret)
   .then(user => {
     // Runs after the initial login
-    console.log(user)
     cb(null, {id: user[0].id, first_name: user[0].first_name, last_name: user[0].last_name})
   })
 }))
 
 // Turns user into session id encoding a user
-passport.serializeUser(function(user, cb) {
-  cb(null, user) // Calling cb here passes data into session
-})
+passport.serializeUser((user, cb) => cb(null, user)) // Calling cb here passes data into session
 
-// Gets called on every request - find user by id and returns a user
-passport.deserializeUser(function(user, cb) {
-  console.log('deserialize', user)
-  db.getUser(user.id).then(user => cb(null, user))
-})
+// Called on every request - finds user by id and returns a user
+passport.deserializeUser((user, cb) => db.getUser(user.id).then(user => cb(null, user)))
 
 app.use('/api/v1', index)
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   let err = new Error('Not Found')
   err.status = 404
   next(err)
@@ -73,14 +67,14 @@ app.use(function(req, res, next) {
 
 // development error handler - will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res) {
+  app.use((err, req, res) => {
     res.status(err.status || 500)
     res.send({'error': { message: err.message, error: err }})
   })
 }
 
 // production error handler - no stacktraces leaked to user
-app.use(function(err, req, res) {
+app.use((err, req, res) => {
   res.status(err.status || 500)
   res.send({'error': { message: err.message, error: err }})
 })
