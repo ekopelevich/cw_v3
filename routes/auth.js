@@ -20,12 +20,13 @@ router.get('/twitter', passport.authenticate('twitter'))
 // This route receives the auth 'code' from Twitter
 // The cb makes 2 api calls to Twitter to compare user credentials and get user info back
 router.get('/twitter/callback', passport.authenticate('twitter', {
-  successRedirect: '/api/v1/auth/success',
+  successRedirect: `${process.env.SERVER_HOST}/api/v1/auth/success`,
   failureRedirect: process.env.CLIENT_HOST,
 }))
 
 router.get('/success', (req, res) => {
-  res.redirect(`${process.env.CLIENT_HOST}/#/users/${req.user.id}/profile`)
+  console.log('success')
+  res.redirect(`${process.env.CLIENT_HOST}/users/${req.user.id}/profile`)
 })
 
 router.get('/logout', (req, res) => {
