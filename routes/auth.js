@@ -25,7 +25,7 @@ router.get('/twitter/callback', passport.authenticate('twitter', {
 }))
 
 router.get('/success', (req, res) => {
-  res.redirect(`${process.env.CLIENT_HOST}/users/${req.user.id}/profile`)
+  res.redirect(`${process.env.CLIENT_HOST}/#/users/${req.user.id}/profile`)
 })
 
 router.get('/logout', (req, res) => {
